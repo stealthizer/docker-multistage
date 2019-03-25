@@ -1,0 +1,12 @@
+FROM ubuntu
+RUN apt-get update -y -q && apt-get upgrade -y -q
+RUN DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y -q curl build-essential \
+    ca-certificates git && rm -fr /var/lib/apt/lists/*
+RUN curl -s https://storage.googleapis.com/golang/go1.10.1.linux-amd64.tar.gz| tar -v -C /usr/local -xz
+ENV PATH $PATH:/usr/local/go/bin
+RUN adduser --system --home /app user
+ADD go-http-server.go /app/
+WORKDIR /app
+RUN go build -o main .
+USER user
+CMD ["./main"]

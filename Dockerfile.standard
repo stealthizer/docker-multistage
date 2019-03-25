@@ -1,0 +1,8 @@
+FROM golang:alpine
+RUN mkdir /app
+ADD go-http-server.go /app/
+WORKDIR /app
+RUN go build -o main .
+RUN adduser -S -D -H -h /app user
+USER user
+CMD ["./main"]
